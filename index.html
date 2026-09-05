@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bittu Store — Your Neighbourhood Kirana, Delivered</title>
+<meta name="description" content="Fresh groceries, snacks and daily essentials from Bittu Store — delivered fast to your door.">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/home.css">
+</head>
+<body>
+
+<div id="site-header-mount"></div>
+
+<section class="hero">
+  <div class="hero-dots"></div>
+  <div class="container">
+    <div>
+      <span class="eyebrow" style="color:var(--mango)">Fresh today, delivered today</span>
+      <h1>The kirana store<br>that comes to <em>you.</em></h1>
+      <p>Farm-fresh produce, daily essentials and local favourites — packed with care and delivered in as little as 45 minutes.</p>
+      <div style="display:flex;gap:14px;flex-wrap:wrap;">
+        <a href="products.html" class="btn btn-primary">Start Shopping</a>
+        <a href="products.html?cat=Fruits%20%26%20Veg" class="btn btn-outline" style="border-color:var(--cream);color:var(--cream);">Today's Fresh Picks</a>
+      </div>
+    </div>
+    <div class="hero-art">
+      <div class="hero-ticket">
+        <span class="cap">Bittu Store Ticket No. 001</span>
+        <div class="big">Up to 30% OFF</div>
+        <span class="cap">on your first basket</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="container">
+  <div id="category-chips" class="chip-row"></div>
+</div>
+
+<section class="section container">
+  <div class="section-head">
+    <h2>🔥 Trending Near You</h2>
+    <a href="products.html" class="see-all">See all →</a>
+  </div>
+  <div class="product-grid" id="trending-grid"></div>
+</section>
+
+<section class="section container" style="background:var(--paper);border-radius:24px;">
+  <div class="section-head">
+    <h2>🏷️ Today's Best Offers</h2>
+    <a href="products.html" class="see-all">See all →</a>
+  </div>
+  <div class="product-grid" id="offers-grid"></div>
+</section>
+
+<section class="section container">
+  <div class="section-head">
+    <h2>🆕 New In Store</h2>
+    <a href="products.html" class="see-all">See all →</a>
+  </div>
+  <div class="product-grid" id="new-grid"></div>
+</section>
+
+<section class="section container">
+  <div class="promo-strip">
+    <div><span style="font-size:26px;">🚚</span><strong>Free delivery</strong><span>on orders above ₹399</span></div>
+    <div><span style="font-size:26px;">⏱️</span><strong>45-min delivery</strong><span>from your local store</span></div>
+    <div><span style="font-size:26px;">↩️</span><strong>Easy returns</strong><span>within 24 hours</span></div>
+    <div><span style="font-size:26px;">🔒</span><strong>Secure checkout</strong><span>your data stays safe</span></div>
+  </div>
+</section>
+
+<div id="site-footer-mount"></div>
+
+<script src="js/app.js"></script>
+<script src="js/products.js"></script>
+<script>
+  renderHeader({basePath:'', active:'all'});
+  renderFooter({basePath:''});
+  initHomePage();
+</script>
+</body>
+</html>

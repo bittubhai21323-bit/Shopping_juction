@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Product — Bittu Store</title>
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/product.css">
+</head>
+<body>
+
+<div id="site-header-mount"></div>
+
+<div class="container">
+  <nav class="breadcrumbs">
+    <a href="index.html">Home</a> / <a href="products.html">Products</a> / <a id="crumb-cat" href="#"></a> / <span id="crumb-name"></span>
+  </nav>
+
+  <div class="pd-layout" id="product-detail"></div>
+
+  <div class="reviews-section card" style="margin-bottom:40px;">
+    <div id="reviews-summary"></div>
+    <div id="reviews-list"></div>
+    <div id="review-form-wrap"></div>
+  </div>
+
+  <div class="related-section">
+    <div class="section-head">
+      <h2>You may also like</h2>
+    </div>
+    <div class="product-grid" id="related-grid"></div>
+  </div>
+</div>
+
+<div id="site-footer-mount"></div>
+
+<script src="js/app.js"></script>
+<script src="js/products.js"></script>
+<script>
+  renderHeader({basePath:'', active:''});
+  renderFooter({basePath:''});
+  initProductDetailPage();
+</script>
+</body>
+</html>

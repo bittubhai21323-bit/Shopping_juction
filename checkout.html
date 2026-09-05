@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Checkout — Bittu Store</title>
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/checkout.css">
+</head>
+<body>
+
+<div id="site-header-mount"></div>
+
+<div class="container">
+  <div class="page-head">
+    <span class="eyebrow">Step 2 of 2</span>
+    <h1>Checkout</h1>
+  </div>
+
+  <div id="checkout-layout">
+    <div>
+      <div class="checkout-section card">
+        <h3>📍 Delivery Address</h3>
+        <div id="saved-addresses"></div>
+        <button class="btn btn-outline btn-sm" id="add-address-toggle" style="margin-top:8px;">+ Add New Address</button>
+
+        <form id="new-address-form" style="display:none;margin-top:16px;">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="addr-label">Address Label</label>
+              <input id="addr-label" placeholder="Home / Work" required>
+            </div>
+            <div class="form-group">
+              <label for="addr-name">Full Name</label>
+              <input id="addr-name" required>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="addr-phone">Phone Number</label>
+              <input id="addr-phone" type="tel" pattern="[0-9]{10}" placeholder="10-digit number" required>
+            </div>
+            <div class="form-group">
+              <label for="addr-pincode">Pincode</label>
+              <input id="addr-pincode" pattern="[0-9]{6}" placeholder="6-digit pincode" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="addr-line1">Full Address</label>
+            <textarea id="addr-line1" rows="2" placeholder="House no, street, area" required></textarea>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="addr-city">City</label>
+              <input id="addr-city" required>
+            </div>
+            <div class="form-group">
+              <label for="addr-state">State</label>
+              <input id="addr-state" required>
+            </div>
+          </div>
+          <button class="btn btn-dark" type="submit">Save Address</button>
+        </form>
+      </div>
+
+      <div class="checkout-section card">
+        <h3>💳 Payment Method</h3>
+        <label class="pay-option"><input type="radio" name="pay-method" value="COD" checked> Cash on Delivery</label>
+        <label class="pay-option"><input type="radio" name="pay-method" value="UPI"> UPI</label>
+        <label class="pay-option"><input type="radio" name="pay-method" value="Card"> Credit / Debit Card</label>
+      </div>
+
+      <div class="checkout-section card">
+        <h3>🧾 Order Items</h3>
+        <div id="checkout-items"></div>
+      </div>
+    </div>
+
+    <div id="checkout-summary" class="card">
+      <h3>Total Payable</h3>
+      <div class="form-group" style="margin-top:12px;">
+        <label for="coupon-input">Have a coupon?</label>
+        <div style="display:flex;gap:8px;">
+          <input id="coupon-input" placeholder="e.g. WELCOME10" style="flex:1;text-transform:uppercase;">
+          <button type="button" class="btn btn-outline btn-sm" id="apply-coupon-btn">Apply</button>
+        </div>
+        <div id="coupon-msg" class="form-hint"></div>
+        <p class="form-hint">Try: WELCOME10, FRESH50, BULK100</p>
+      </div>
+      <div id="checkout-totals"></div>
+      <div id="checkout-error" class="error-msg"></div>
+      <button class="btn btn-primary btn-block" id="place-order-btn" style="margin-top:14px;">Place Order</button>
+    </div>
+  </div>
+
+  <div id="checkout-empty" class="empty-state" style="display:none;">
+    <div class="big-emoji">🧺</div>
+    <h3>Your cart is empty</h3>
+    <p>Add some products before checking out.</p>
+    <a href="products.html" class="btn btn-primary" style="margin-top:14px;">Browse Products</a>
+  </div>
+</div>
+
+<div id="site-footer-mount"></div>
+
+<script src="js/app.js"></script>
+<script src="js/checkout.js"></script>
+<script>
+  renderHeader({basePath:'', active:''});
+  renderFooter({basePath:''});
+  initCheckoutPage();
+</script>
+</body>
+</html>

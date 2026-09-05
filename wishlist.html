@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Wishlist — Bittu Store</title>
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/product.css">
+</head>
+<body>
+
+<div id="site-header-mount"></div>
+
+<div class="container">
+  <div class="page-head">
+    <span class="eyebrow">Account</span>
+    <h1>My Wishlist</h1>
+  </div>
+  <div class="product-grid" id="wishlist-grid" style="padding-bottom:60px;"></div>
+  <div id="wishlist-empty" class="empty-state" style="display:none;">
+    <div class="big-emoji">🤍</div>
+    <h3>Your wishlist is empty</h3>
+    <p>Tap the heart on any product to save it here for later.</p>
+    <a href="products.html" class="btn btn-primary" style="margin-top:14px;">Browse Products</a>
+  </div>
+</div>
+
+<div id="site-footer-mount"></div>
+
+<script src="js/app.js"></script>
+<script src="js/products.js"></script>
+<script>
+  renderHeader({basePath:'', active:''});
+  renderFooter({basePath:''});
+
+  const wIds = getWishlist();
+  const wProducts = getApprovedProducts().filter(p=>wIds.includes(p.id));
+  if(wProducts.length===0){
+    document.getElementById('wishlist-empty').style.display='block';
+  }else{
+    renderGridInto('wishlist-grid', wProducts, '');
+  }
+  wireProductGridEvents('');
+</script>
+</body>
+</html>

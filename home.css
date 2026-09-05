@@ -1,0 +1,21 @@
+.promo-strip{
+  display:grid;
+  grid-template-columns:repeat(4, 1fr);
+  gap:18px;
+  background:var(--indigo);
+  border-radius:20px;
+  padding:28px;
+}
+.promo-strip > div{
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  gap:2px;
+  color:var(--cream);
+}
+.promo-strip strong{ font-family:var(--f-display); font-size:16px; }
+.promo-strip span{ font-size:12.5px; color:#A6A5C4; }
+
+@media (max-width: 720px){
+  .promo-strip{ grid-template-columns:1fr 1fr; }
+}

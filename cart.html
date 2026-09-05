@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Cart — Bittu Store</title>
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/checkout.css">
+</head>
+<body>
+
+<div id="site-header-mount"></div>
+
+<div class="container">
+  <div class="page-head">
+    <span class="eyebrow">Step 1 of 2</span>
+    <h1>My Cart</h1>
+  </div>
+
+  <div id="cart-layout">
+    <div id="cart-list"></div>
+    <div id="cart-summary" class="card"></div>
+  </div>
+
+  <div id="cart-empty" class="empty-state" style="display:none;">
+    <div class="big-emoji">🛒</div>
+    <h3>Your cart is empty</h3>
+    <p>Looks like you haven't added anything yet.</p>
+    <a href="products.html" class="btn btn-primary" style="margin-top:14px;">Browse Products</a>
+  </div>
+</div>
+
+<div id="site-footer-mount"></div>
+
+<script src="js/app.js"></script>
+<script src="js/cart.js"></script>
+<script>
+  renderHeader({basePath:'', active:''});
+  renderFooter({basePath:''});
+  renderCartPage();
+</script>
+</body>
+</html>
