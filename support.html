@@ -75,6 +75,11 @@
           <button class="btn btn-primary btn-block" type="submit">Send Message</button>
         </form>
       </div>
+
+      <div class="card" style="margin-top:20px;">
+        <h3>Recent Support Tickets</h3>
+        <div id="support-history" style="margin-top:12px;"></div>
+      </div>
     </div>
   </div>
 </div>
@@ -85,6 +90,25 @@
 <script>
   renderHeader({basePath:'', active:''});
   renderFooter({basePath:''});
+
+  function renderSupportHistory(){
+    const history = getSupportMessages();
+    const wrap = document.getElementById('support-history');
+    if(!history.length){
+      wrap.innerHTML = '<p class="form-hint">No support tickets yet. Your messages will appear here.</p>';
+      return;
+    }
+    wrap.innerHTML = history.slice(0, 5).map(item=>`
+      <div style="padding:10px 0;border-bottom:1px solid var(--line);">
+        <div style="display:flex;justify-content:space-between;gap:12px;align-items:center;">
+          <strong>${item.topic}</strong>
+          <span style="font-size:11px;color:var(--ink-soft);">${new Date(item.createdAt).toLocaleDateString('en-IN')}</span>
+        </div>
+        <div style="font-size:12px;color:var(--ink-soft);margin:6px 0;">${item.name} • ${item.email}</div>
+        <div style="font-size:13px;line-height:1.5;">${item.message}</div>
+      </div>
+    `).join('');
+  }
 
   const FAQS = [
     {q:'How fast is delivery?', a:'Most orders arrive within 45 minutes from your nearest Bittu Store hub. Delivery time may vary based on your location and order size.'},
@@ -108,8 +132,22 @@
     });
   });
 
+  renderSupportHistory();
+
   document.getElementById('support-form').addEventListener('submit', function(e){
     e.preventDefault();
+    const payload = {
+      name: document.getElementById('sup-name').value.trim(),
+      email: document.getElementById('sup-email').value.trim(),
+      topic: document.getElementById('sup-topic').value,
+      message: document.getElementById('sup-message').value.trim()
+    };
+    if(!payload.name || !payload.email || !payload.message){
+      toast('Please fill all required fields.');
+      return;
+    }
+    addSupportMessage(payload);
+    renderSupportHistory();
     toast('Message sent! Our support team will get back to you shortly.');
     this.reset();
   });

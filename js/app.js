@@ -14,7 +14,6 @@ const LS = {
   cart: 'bittu_cart_',
   orders: 'bittu_orders',
   reviews: 'bittu_reviews',
-  support: 'bittu_support_messages',
   theme: 'bittu_theme'
 };
 
@@ -220,22 +219,6 @@ function addReview(productId, rating, comment){
 }
 function hasUserReviewed(productId, userId){
   return getReviews().some(r=>r.productId===productId && r.userId===userId);
-}
-
-function getSupportMessages(){ return lsGet(LS.support, []); }
-function saveSupportMessages(list){ lsSet(LS.support, list); }
-function addSupportMessage({name, email, topic, message}){
-  const list = getSupportMessages();
-  list.unshift({
-    id:'S'+Date.now().toString().slice(-8),
-    name:(name||'Customer').trim(),
-    email:(email||'').trim(),
-    topic:(topic||'General').trim(),
-    message:(message||'').trim(),
-    createdAt:new Date().toISOString()
-  });
-  saveSupportMessages(list.slice(0, 20));
-  return true;
 }
 
 /* ---------- session / auth ---------- */
