@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Profile — Bittu Store</title>
+<link rel="stylesheet" href="css/style.css">
+<style>
+  .profile-layout{ display:grid; grid-template-columns:260px 1fr; gap:26px; padding-bottom:60px; }
+  .profile-nav{ display:flex; flex-direction:column; gap:6px; }
+  .profile-nav a{ padding:12px 16px; border-radius:10px; font-weight:600; font-size:14px; color:var(--ink); display:flex; align-items:center; gap:10px; }
+  .profile-nav a:hover{ background:var(--paper); }
+  .profile-nav a.current{ background:var(--indigo); color:var(--cream); }
+  .avatar-circle{ width:64px; height:64px; border-radius:999px; background:var(--mango); color:var(--indigo); display:flex; align-items:center; justify-content:center; font-family:var(--f-display); font-weight:900; font-size:26px; margin-bottom:10px; }
+  .addr-mini{ border:1.5px solid var(--line); border-radius:10px; padding:14px; margin-bottom:10px; font-size:13.5px; }
+</style>
+</head>
+<body>
+
+<div id="site-header-mount"></div>
+
+<div class="container">
+  <div class="page-head">
+    <span class="eyebrow">Account</span>
+    <h1>My Profile</h1>
+  </div>
+
+  <div class="profile-layout">
+    <div>
+      <div class="card" style="margin-bottom:16px;">
+        <div class="avatar-circle" id="profile-avatar"></div>
+        <strong id="profile-name-side"></strong><br>
+        <span style="font-size:12.5px;color:var(--ink-soft)" id="profile-email-side"></span>
+      </div>
+      <nav class="profile-nav">
+        <a href="profile.html" class="current">👤 Personal Details</a>
+        <a href="orders.html">📦 My Orders</a>
+        <a href="wishlist.html">❤️ Wishlist</a>
+        <a href="cart.html">🛒 Cart</a>
+        <a href="#" id="logout-link">🚪 Logout</a>
+      </nav>
+    </div>
+
+    <div>
+      <div class="card" style="margin-bottom:20px;">
+        <h3>Personal Details</h3>
+        <form id="profile-form">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="pf-name">Full Name</label>
+              <input id="pf-name" required>
+            </div>
+            <div class="form-group">
+              <label for="pf-phone">Phone Number</label>
+              <input id="pf-phone" type="tel">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="pf-email">Email Address</label>
+            <input id="pf-email" type="email" disabled>
+            <span class="form-hint">Email cannot be changed.</span>
+          </div>
+          <button class="btn btn-primary" type="submit">Save Changes</button>
+        </form>
+      </div>
+
+      <div class="card">
+        <h3>Saved Addresses</h3>
+        <div id="profile-addresses"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="site-footer-mount"></div>
+
+<script src="js/app.js"></script>
+<script>
+  renderHeader({basePath:'', active:''});
+  renderFooter({basePath:''});
+
+  const user = requireAuth('login.html');
+  if(user){
+    document.getElementById('profile-avatar').textContent = user.name.charAt(0).toUpperCase();
+    document.getElementById('profile-name-side').textContent = user.name;
+    document.getElementById('profile-email-side').textContent = user.email;
+    document.getElementById('pf-name').value = user.name;
+    document.getElementById('pf-phone').value = user.phone || '';
+    document.getElementById('pf-email').value = user.email;
+
+    const addrWrap = document.getElementById('profile-addresses');
+    function renderAddrs(){
+      const list = user.addresses || [];
+      addrWrap.innerHTML = list.length ? list.map(a=>`
+        <div class="addr-mini"><strong>${a.label}</strong> — ${a.name}, ${a.phone}<br>${a.line1}, ${a.city}, ${a.state} - ${a.pincode}</div>
+      `).join('') : `<p class="form-hint">No saved addresses yet. Add one at checkout.</p>`;
+    }
+    renderAddrs();
+
+    document.getElementById('profile-form').addEventListener('submit', function(e){
+      e.preventDefault();
+      const users = getUsers();
+      const u = users.find(x=>x.id===user.id);
+      u.name = document.getElementById('pf-name').value.trim();
+      u.phone = document.getElementById('pf-phone').value.trim();
+      saveUsers(users);
+      document.getElementById('profile-name-side').textContent = u.name;
+      document.getElementById('profile-avatar').textContent = u.name.charAt(0).toUpperCase();
+      toast('Profile updated');
+    });
+
+    document.getElementById('logout-link').addEventListener('click', function(e){
+      e.preventDefault();
+      logout();
+    });
+  }
+</script>
+</body>
+</html>

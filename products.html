@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>All Products — Bittu Store</title>
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/product.css">
+</head>
+<body>
+
+<div id="site-header-mount"></div>
+
+<div class="container">
+  <div class="page-head">
+    <span class="eyebrow">Shop</span>
+    <h1 id="results-heading">All Products</h1>
+  </div>
+
+  <div class="products-layout">
+    <aside class="filters-panel card">
+      <h3>Filters</h3>
+      <div class="filter-block">
+        <h4>Category</h4>
+        <div id="filter-categories" class="cat-check-group"></div>
+      </div>
+      <div class="filter-block">
+        <h4>Max Price: <span id="filter-price-label"></span></h4>
+        <input type="range" id="filter-price" min="20" max="600" value="600" step="10">
+      </div>
+      <button class="btn btn-outline btn-block" id="clear-filters">Clear Filters</button>
+    </aside>
+
+    <div class="products-main">
+      <div class="sort-row">
+        <select id="sort-select" aria-label="Sort products">
+          <option value="featured">Sort: Featured</option>
+          <option value="price-asc">Price: Low to High</option>
+          <option value="price-desc">Price: High to Low</option>
+          <option value="rating">Rating: High to Low</option>
+          <option value="discount">Biggest Discount</option>
+        </select>
+      </div>
+      <div class="product-grid" id="products-grid"></div>
+    </div>
+  </div>
+</div>
+
+<div id="site-footer-mount"></div>
+
+<script src="js/app.js"></script>
+<script src="js/products.js"></script>
+<script>
+  renderHeader({basePath:'', active:'all'});
+  renderFooter({basePath:''});
+  initProductsPage();
+</script>
+</body>
+</html>

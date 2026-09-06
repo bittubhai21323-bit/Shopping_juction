@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Help &amp; Support — Bittu Store</title>
+<link rel="stylesheet" href="css/style.css">
+<style>
+  .support-layout{ display:grid; grid-template-columns:1.3fr 1fr; gap:28px; padding-bottom:60px; }
+  .faq-item{ border-bottom:1px solid var(--line); padding:16px 0; }
+  .faq-item:last-child{ border-bottom:0; }
+  .faq-q{ display:flex; justify-content:space-between; align-items:center; width:100%; background:none; border:0; text-align:left; font-weight:700; font-size:14.5px; color:var(--indigo); padding:0; }
+  .faq-q .arrow{ transition:transform .2s ease; font-size:14px; color:var(--ink-soft); }
+  .faq-item.open .faq-q .arrow{ transform:rotate(180deg); }
+  .faq-a{ display:none; font-size:13.5px; color:var(--ink-soft); line-height:1.6; margin-top:10px; }
+  .faq-item.open .faq-a{ display:block; }
+  .contact-quick{ display:flex; flex-direction:column; gap:12px; margin-bottom:20px; }
+  .contact-quick a{ display:flex; align-items:center; gap:10px; font-size:13.5px; font-weight:600; }
+  .contact-quick .ic{ width:36px; height:36px; border-radius:999px; background:var(--cream); display:flex; align-items:center; justify-content:center; font-size:16px; }
+  @media (max-width: 860px){ .support-layout{ grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+
+<div id="site-header-mount"></div>
+
+<div class="container">
+  <div class="page-head">
+    <span class="eyebrow">We're here to help</span>
+    <h1>Help &amp; Support</h1>
+  </div>
+
+  <div class="support-layout">
+    <div class="card">
+      <h3 style="margin-bottom:6px;">Frequently Asked Questions</h3>
+      <div id="faq-list"></div>
+    </div>
+
+    <div>
+      <div class="card" style="margin-bottom:20px;">
+        <h3>Quick Contact</h3>
+        <div class="contact-quick" style="margin-top:14px;">
+          <a href="tel:+919876543210"><span class="ic">📞</span> +91 98765 43210</a>
+          <a href="https://wa.me/916203113464" target="_blank" rel="noopener"><span class="ic">💬</span> Chat on WhatsApp</a>
+          <a href="mailto:[email protected]"><span class="ic">✉️</span> [email protected]</a>
+        </div>
+        <p class="form-hint">Mon–Sun, 7am – 11pm</p>
+      </div>
+
+      <div class="card">
+        <h3>Send us a message</h3>
+        <form id="support-form" style="margin-top:14px;">
+          <div class="form-group">
+            <label for="sup-name">Your Name</label>
+            <input id="sup-name" required>
+          </div>
+          <div class="form-group">
+            <label for="sup-email">Email Address</label>
+            <input id="sup-email" type="email" required>
+          </div>
+          <div class="form-group">
+            <label for="sup-topic">Topic</label>
+            <select id="sup-topic">
+              <option>Order issue</option>
+              <option>Payment / refund</option>
+              <option>Product question</option>
+              <option>Become a seller</option>
+              <option>Something else</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="sup-message">Message</label>
+            <textarea id="sup-message" rows="4" required></textarea>
+          </div>
+          <button class="btn btn-primary btn-block" type="submit">Send Message</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="site-footer-mount"></div>
+
+<script src="js/app.js"></script>
+<script>
+  renderHeader({basePath:'', active:''});
+  renderFooter({basePath:''});
+
+  const FAQS = [
+    {q:'How fast is delivery?', a:'Most orders arrive within 45 minutes from your nearest Bittu Store hub. Delivery time may vary based on your location and order size.'},
+    {q:'What payment methods are accepted?', a:'You can pay via Cash on Delivery, UPI, or Credit/Debit Card at checkout.'},
+    {q:'How do I track my order?', a:'Go to My Orders from your profile menu to see live status — Pending, Shipped, or Delivered.'},
+    {q:'Can I return a product?', a:'Yes, most items can be returned within 24 hours of delivery. Contact support with your order ID to start a return.'},
+    {q:'How do I sell on Bittu Store?', a:'Sign up and check "I want to sell my products on Bittu Store" — your seller account will be reviewed and approved by our admin team, after which you can list products from your Seller Dashboard.'},
+    {q:'Is my payment information safe?', a:'Yes, all transactions are processed securely. We never store your card details on our servers.'}
+  ];
+
+  document.getElementById('faq-list').innerHTML = FAQS.map((f,i)=>`
+    <div class="faq-item" data-i="${i}">
+      <button class="faq-q" type="button">${f.q} <span class="arrow">▾</span></button>
+      <div class="faq-a">${f.a}</div>
+    </div>
+  `).join('');
+
+  document.querySelectorAll('.faq-item').forEach(item=>{
+    item.querySelector('.faq-q').addEventListener('click', ()=>{
+      item.classList.toggle('open');
+    });
+  });
+
+  document.getElementById('support-form').addEventListener('submit', function(e){
+    e.preventDefault();
+    toast('Message sent! Our support team will get back to you shortly.');
+    this.reset();
+  });
+</script>
+</body>
+</html>

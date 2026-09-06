@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Orders — Bittu Store</title>
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/checkout.css">
+<style>
+  .order-card{ margin-bottom:18px; }
+  .order-top{ display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px; align-items:center; border-bottom:1px solid var(--line); padding-bottom:14px; margin-bottom:14px; }
+  .order-top .oid{ font-family:var(--f-mono); font-size:13px; color:var(--ink-soft); }
+  .order-item-row{ display:flex; align-items:center; gap:12px; padding:8px 0; }
+  .order-item-row img{ width:52px; height:52px; border-radius:8px; object-fit:cover; }
+  .order-item-row .name{ font-size:13.5px; font-weight:600; flex:1; }
+  .order-item-row .qtyprice{ font-family:var(--f-mono); font-size:13px; color:var(--ink-soft); }
+  .order-foot{ display:flex; justify-content:space-between; align-items:center; margin-top:12px; border-top:1px dashed var(--line); padding-top:12px; }
+  .success-banner{ background:#DCF6E9; color:#0A7A47; padding:14px 18px; border-radius:12px; margin-bottom:20px; font-weight:600; }
+</style>
+</head>
+<body>
+
+<div id="site-header-mount"></div>
+
+<div class="container">
+  <div class="page-head">
+    <span class="eyebrow">Account</span>
+    <h1>My Orders</h1>
+  </div>
+  <div id="order-success" style="display:none;" class="success-banner">🎉 Your order has been placed successfully!</div>
+  <div id="orders-list" style="padding-bottom:60px;"></div>
+  <div id="orders-empty" class="empty-state" style="display:none;">
+    <div class="big-emoji">📦</div>
+    <h3>No orders yet</h3>
+    <p>When you place an order, it'll show up here.</p>
+    <a href="products.html" class="btn btn-primary" style="margin-top:14px;">Start Shopping</a>
+  </div>
+</div>
+
+<div id="site-footer-mount"></div>
+
+<script src="js/app.js"></script>
+<script>
+  renderHeader({basePath:'', active:''});
+  renderFooter({basePath:''});
+
+  function orderStepperHTML(status){
+    const steps = ['Pending','Shipped','Delivered'];
+    if(status==='Cancelled'){
+      return `<div class="order-stepper">
+        <div class="order-step cancelled"><span class="dot">✕</span><span class="label">Cancelled</span></div>
+      </div>`;
+    }
+    const currentIdx = steps.indexOf(status);
+    return `<div class="order-stepper">
+      ${steps.map((s,i)=>{
+        let cls = '';
+        if(i < currentIdx) cls = 'done';
+        else if(i === currentIdx) cls = 'current';
+        return `<div class="order-step ${cls}"><span class="line"></span><span class="dot">${i<currentIdx?'✓':i+1}</span><span class="label">${s}</span></div>`;
+      }).join('')}
+    </div>`;
+  }
+
+  const user = requireAuth('login.html');
+  if(user){
+    const placedId = new URLSearchParams(location.search).get('placed');
+    if(placedId){ document.getElementById('order-success').style.display='block'; }
+
+    const myOrders = getOrders().filter(o=>o.userId===user.id).sort((a,b)=> new Date(b.date)-new Date(a.date));
+    const listEl = document.getElementById('orders-list');
+
+    if(myOrders.length===0){
+      document.getElementById('orders-empty').style.display='block';
+    }else{
+      listEl.innerHTML = myOrders.map(o=>{
+        const pillClass = {Pending:'pill-pending', Shipped:'pill-shipped', Delivered:'pill-delivered', Cancelled:'pill-cancelled'}[o.status] || 'pill-pending';
+        const discountLine = o.discount ? `<div style="font-size:12px;color:var(--teal);margin-top:4px;">Coupon ${o.couponCode} applied: −${formatINR(o.discount)}</div>` : '';
+        return `
+        <div class="card order-card">
+          <div class="order-top">
+            <div>
+              <span class="oid">Order #${o.id}</span><br>
+              <span style="font-size:12.5px;color:var(--ink-soft)">${new Date(o.date).toLocaleString('en-IN', {dateStyle:'medium', timeStyle:'short'})}</span>
+            </div>
+            <span class="pill ${pillClass}">${o.status}</span>
+          </div>
+          ${orderStepperHTML(o.status)}
+          ${o.items.map(it=>`
+            <div class="order-item-row">
+              <img src="${it.image}" alt="${it.name}">
+              <span class="name">${it.name}</span>
+              <span class="qtyprice">${it.qty} × ${formatINR(it.price)}</span>
+            </div>
+          `).join('')}
+          ${discountLine}
+          <div class="order-foot">
+            <span style="font-size:12.5px;color:var(--ink-soft)">Delivering to ${o.address ? o.address.city : ''}</span>
+            <span class="price-now">${formatINR(o.total)}</span>
+          </div>
+        </div>`;
+      }).join('');
+    }
+  }
+</script>
+</body>
+</html>

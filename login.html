@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login / Sign up — Bittu Store</title>
+<link rel="stylesheet" href="css/style.css">
+<style>
+  .auth-wrap{ max-width:440px; margin:50px auto 80px; padding:0 20px; }
+  .auth-logo{ text-align:center; margin-bottom:20px; font-family:var(--f-display); font-weight:900; font-size:28px; color:var(--indigo); }
+  .auth-logo span{ color:var(--coral); }
+
+  .google-btn{
+    width:100%; display:flex; align-items:center; justify-content:center; gap:10px;
+    background:#fff; border:1.5px solid var(--line); border-radius:12px;
+    padding:12px; font-weight:700; font-size:14px; color:var(--ink); margin-bottom:8px;
+    box-shadow:var(--shadow);
+  }
+  .google-btn:hover{ background:#FAFAFA; }
+  .demo-flag{ text-align:center; font-family:var(--f-mono); font-size:10.5px; color:var(--ink-soft); margin-bottom:20px; }
+
+  .or-divider{ display:flex; align-items:center; gap:12px; margin:20px 0; color:var(--ink-soft); font-size:12px; font-family:var(--f-mono); text-transform:uppercase; }
+  .or-divider::before, .or-divider::after{ content:""; flex:1; height:1px; background:var(--line); }
+
+  .method-tabs{ display:flex; background:var(--paper); border-radius:999px; padding:5px; margin-bottom:18px; box-shadow:var(--shadow); }
+  .method-tabs button{ flex:1; border:0; background:transparent; padding:10px; border-radius:999px; font-weight:700; font-size:13px; color:var(--ink-soft); }
+  .method-tabs button.active-tab{ background:var(--indigo); color:var(--cream); }
+
+  .auth-tabs{ display:flex; gap:18px; margin-bottom:16px; border-bottom:1.5px solid var(--line); }
+  .auth-tabs button{ border:0; background:transparent; padding:10px 2px; font-weight:700; font-size:13.5px; color:var(--ink-soft); border-bottom:2px solid transparent; }
+  .auth-tabs button.active-tab{ color:var(--coral); border-bottom-color:var(--coral); }
+
+  .auth-error{ display:none; background:#FFE1E1; color:#B3261E; font-size:13px; padding:10px 14px; border-radius:8px; margin-bottom:14px; }
+  .auth-note{ background:#FFF3C4; color:#946200; font-size:12.5px; padding:9px 14px; border-radius:8px; margin-bottom:14px; font-family:var(--f-mono); display:none; }
+  .demo-hint{ text-align:center; font-size:12px; color:var(--ink-soft); margin-top:18px; font-family:var(--f-mono); }
+
+  .seller-toggle-row{ display:flex; align-items:center; gap:10px; margin:4px 0 16px; font-size:13.5px; font-weight:600; }
+  .seller-toggle-row input{ width:17px; height:17px; accent-color:var(--coral); }
+
+  .otp-row{ display:flex; gap:10px; }
+  .otp-row input{ flex:1; }
+
+  /* google account chooser modal */
+  .g-modal-overlay{ position:fixed; inset:0; background:rgba(27,27,58,0.5); display:none; align-items:center; justify-content:center; z-index:300; padding:20px; }
+  .g-modal-overlay.show{ display:flex; }
+  .g-modal-box{ background:#fff; border-radius:16px; padding:0; width:100%; max-width:360px; overflow:hidden; box-shadow:var(--shadow-lg); }
+  .g-modal-head{ padding:22px 24px 14px; border-bottom:1px solid var(--line); }
+  .g-modal-head strong{ font-size:16px; }
+  .g-modal-head p{ font-size:12.5px; color:var(--ink-soft); margin:4px 0 0; }
+  .g-account{ display:flex; align-items:center; gap:12px; padding:14px 24px; width:100%; border:0; background:none; text-align:left; }
+  .g-account:hover{ background:var(--cream); }
+  .g-avatar{ width:36px; height:36px; border-radius:999px; background:var(--mango); color:var(--indigo); display:flex; align-items:center; justify-content:center; font-weight:800; flex:0 0 auto; }
+  .g-account .g-name{ font-size:14px; font-weight:600; }
+  .g-account .g-email{ font-size:12px; color:var(--ink-soft); }
+  .g-modal-foot{ padding:14px 24px 20px; }
+</style>
+</head>
+<body>
+
+<div class="auth-wrap">
+  <a href="index.html" class="auth-logo">Bittu<span>Store</span></a>
+
+  <button class="google-btn" id="google-signin-btn" type="button">
+    <span style="font-size:18px;">🔵</span> Continue with Google
+  </button>
+  <p class="demo-flag">Demo Mode — simulated Google sign-in for this project</p>
+
+  <div class="method-tabs">
+    <button id="tab-email" class="active-tab" type="button">Email</button>
+    <button id="tab-otp" type="button">Mobile OTP</button>
+  </div>
+
+  <!-- ===== Email method ===== -->
+  <div id="method-email">
+    <div class="auth-tabs">
+      <button id="tab-login" class="active-tab" type="button">Login</button>
+      <button id="tab-signup" type="button">Sign Up</button>
+    </div>
+
+    <form id="form-login" class="card">
+      <div id="login-error" class="auth-error"></div>
+      <div class="form-group">
+        <label for="login-email">Email Address</label>
+        <input id="login-email" type="email" required placeholder="[email protected]">
+      </div>
+      <div class="form-group">
+        <label for="login-password">Password</label>
+        <input id="login-password" type="password" required placeholder="••••••••">
+      </div>
+      <button class="btn btn-primary btn-block" type="submit">Login</button>
+      <p class="demo-hint">Admin demo: [email protected] / admin123<br>Seller demo: [email protected] / seller123</p>
+    </form>
+
+    <form id="form-signup" class="card" style="display:none;">
+      <div id="signup-error" class="auth-error"></div>
+      <div class="form-group">
+        <label for="signup-name">Full Name</label>
+        <input id="signup-name" required>
+      </div>
+      <div class="form-group">
+        <label for="signup-email">Email Address</label>
+        <input id="signup-email" type="email" required>
+      </div>
+      <div class="form-group">
+        <label for="signup-phone">Phone Number</label>
+        <input id="signup-phone" type="tel" placeholder="10-digit number">
+      </div>
+      <div class="form-group">
+        <label for="signup-password">Password</label>
+        <input id="signup-password" type="password" required placeholder="At least 4 characters">
+      </div>
+
+      <label class="seller-toggle-row">
+        <input type="checkbox" id="signup-seller-check">
+        🏪 I want to sell my products on Bittu Store
+      </label>
+      <div class="form-group" id="signup-shopname-group" style="display:none;">
+        <label for="signup-shopname">Shop / Business Name</label>
+        <input id="signup-shopname" placeholder="e.g. Fresh Mart">
+      </div>
+
+      <button class="btn btn-primary btn-block" type="submit">Create Account</button>
+    </form>
+  </div>
+
+  <!-- ===== Mobile OTP method ===== -->
+  <div id="method-otp" class="card" style="display:none;">
+    <div id="otp-error" class="auth-error"></div>
+    <div id="otp-note" class="auth-note"></div>
+
+    <div id="otp-step-phone">
+      <div class="form-group">
+        <label for="otp-phone">Mobile Number</label>
+        <input id="otp-phone" type="tel" pattern="[0-9]{10}" placeholder="10-digit mobile number">
+      </div>
+      <button class="btn btn-primary btn-block" id="send-otp-btn" type="button">Send OTP</button>
+    </div>
+
+    <div id="otp-step-verify" style="display:none;">
+      <div class="form-group">
+        <label for="otp-code">Enter 4-digit OTP</label>
+        <div class="otp-row">
+          <input id="otp-code" inputmode="numeric" maxlength="4" placeholder="••••">
+          <button class="btn btn-outline" id="resend-otp-btn" type="button">Resend</button>
+        </div>
+      </div>
+      <button class="btn btn-primary btn-block" id="verify-otp-btn" type="button">Verify &amp; Continue</button>
+    </div>
+    <p class="demo-hint">Demo Mode — no real SMS is sent; the OTP is shown on screen above.</p>
+  </div>
+</div>
+
+<!-- Google demo account chooser -->
+<div class="g-modal-overlay" id="google-modal">
+  <div class="g-modal-box">
+    <div class="g-modal-head">
+      <strong>Choose an account</strong>
+      <p>to continue to Bittu Store (Demo Google Sign-In)</p>
+    </div>
+    <button class="g-account" data-g-name="Priya Sharma" data-g-email="[email protected]">
+      <span class="g-avatar">P</span>
+      <span><span class="g-name" style="display:block;">Priya Sharma</span><span class="g-email">[email protected]</span></span>
+    </button>
+    <button class="g-account" data-g-name="Arjun Mehta" data-g-email="[email protected]">
+      <span class="g-avatar">A</span>
+      <span><span class="g-name" style="display:block;">Arjun Mehta</span><span class="g-email">[email protected]</span></span>
+    </button>
+    <div class="g-modal-foot">
+      <button class="btn btn-outline btn-block btn-sm" id="google-modal-cancel" type="button">Use another method</button>
+    </div>
+  </div>
+</div>
+
+<script src="js/app.js"></script>
+<script src="js/auth.js"></script>
+</body>
+</html>
